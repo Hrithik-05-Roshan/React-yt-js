@@ -1,0 +1,21 @@
+.header{
+  background-color:burlywood;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.header h3{
+  margin-left: 10px;
+  color: #0b0807;
+  text-decoration:underline;
+}
+.header button  {
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background-color:brown ;
+  margin-right: 10px;
+}
