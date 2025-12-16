@@ -1,0 +1,30 @@
+button{
+  margin: 20px;
+}
+input{
+  margin: 20px;
+  padding: 10px 15px;
+}
+.box{
+  height: 200px;
+  width: 200px;
+  background-color: red;
+}
+
+.page1{
+  height:100vh;
+  width: 100%;
+  background-color: black;
+}
+
+.page2{
+  height:100vh;
+  width: 100%;
+  background-color: #111;
+}
+
+.page3{
+  height:100vh;
+  width: 100%;
+  background-color: #222;
+}
