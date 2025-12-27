@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Make It – Collaborative Todo Workspace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ---------- VARIABLES ---------- */
+:root {
+  --bg: #f5f6f8;
+  --bg-alt: #ffffff;
+  --border-subtle: #e1e4ea;
+  --accent: #2563eb;
+  --accent-soft: #e0ecff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --transition: 160ms ease-out;
+}
+
+/* ---------- BASE ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  color: var(--text-main);
+}
+.container { max-width: 1120px; margin: auto; padding: 0 1.4rem; }
+.section { padding: 4.5rem 0; }
+.section-alt { background: rgba(255,255,255,0.8); backdrop-filter: blur(6px); }
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+  position: sticky; top: 0; backdrop-filter: blur(10px);
+  background: rgba(248,250,252,0.9);
+  border-bottom: 1px solid rgba(226,232,240,0.7);
+  z-index: 20;
+}
+.navbar-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .9rem 0;
+}
+.logo { display: flex; align-items: center; gap: .35rem; font-weight: 700; }
+.logo-mark {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid var(--accent);
+  display: flex; justify-content: center; align-items: center;
+}
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a {
+  text-decoration: none; color: var(--text-muted);
+  border-bottom: 2px solid transparent; transition: var(--transition);
+}
+.nav-links a:hover { color: var(--text-main); border-color: var(--accent-soft); }
+.nav-actions { display: flex; gap: .5rem; }
+.nav-toggle { display: none; background: none; border: none; font-size: 1.3rem; }
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  padding: .5rem 1rem; border-radius: 999px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer; transition: var(--transition);
+}
+.btn-primary {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 12px 25px rgba(37,99,235,.3);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(37,99,235,.4); }
+.btn-ghost {
+  background: transparent; border-color: rgba(148,163,184,.7);
+}
+.btn-ghost:hover { background: rgba(248,250,252,.9); }
+
+/* ---------- HERO ---------- */
+.hero { padding: 3.5rem 0 4.2rem; }
+.hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center;
+}
+.hero-copy h1 { font-size: 2.6rem; letter-spacing: -0.03em; margin-bottom: 1rem; }
+.hero-copy p { color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.6; }
+.hero-actions { display: flex; gap: .75rem; margin-bottom: 1.1rem; }
+.hero-meta { display: flex; gap: .7rem; flex-wrap: wrap; font-size: .8rem; color: var(--text-muted); }
+
+/* ---------- BOARD PREVIEW ---------- */
+.hero-board {
+  background: #fff; padding: 1.1rem; border-radius: 18px;
+  border: 1px solid rgba(226,232,240,.9); box-shadow: var(--shadow-soft);
+}
+.board-columns {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem;
+}
+.board-column {
+  background: #f9fafb; padding: .65rem; border-radius: 12px;
+  border: 1px dashed #e5e7eb;
+}
+.card {
+  background: #fff; padding: .55rem; border-radius: 10px;
+  box-shadow: 0 5px 12px rgba(15,23,42,.05); margin-bottom: .5rem;
+  font-size: .8rem;
+}
+.card-highlight { border-left: 3px solid var(--accent); }
+.card-done { border-left: 3px solid #16a34a; }
+
+/* ---------- DEMO INTERACTIVE BOARD ---------- */
+.demo-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
+.demo-column {
+  background: #f9fafb; padding: .7rem; border: 1px dashed #e5e7eb;
+  border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);
+}
+.demo-column.active {
+  background: #eff6ff; border-color: #bfdbfe;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px rgba(37, 99, 235, .25);
+}
+
+/* ---------- FOOTER ---------- */
+.footer { padding: 1.7rem 0; border-top: 1px solid rgba(226,232,240,.9); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 850px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-board { order: -1; }
+  .nav-links {
+    position: absolute; top: 52px; left: 0; right: 0;
+    background: rgba(248,250,252,.98);
+    flex-direction: column; padding: .8rem 1.4rem;
+    opacity: 0; transform: scaleY(0);
+    pointer-events: none; transform-origin: top;
+  }
+  .nav-links.open { opacity: 1; transform: scaleY(1); pointer-events: auto; }
+  .nav-actions { display: none; }
+  .nav-toggle { display: block; }
+}
+</style>
+</head>
+
+<body>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <div class="logo"><span class="logo-mark">▢</span>Make It</div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="#collab">Collab</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-ghost">Log in</button>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+    <button class="nav-toggle" id="navToggle">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <h1>Plan like Trello, win like a team.</h1>
+      <p>Collaborative boards where teams break goals into tasks and track progress in real time.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary">Create Workspace</button>
+        <button class="btn btn-ghost">View Demo</button>
+      </div>
+      <div class="hero-meta">
+        <span>⚡ Live Sync</span>
+        <span>👥 Unlimited Team</span>
+        <span>📊 Progress Insights</span>
+      </div>
+    </div>
+
+    <!-- BOARD PREVIEW -->
+    <div class="hero-board">
+      <div class="board-columns">
+        <div class="board-column">
+          <div class="card">Collect feature ideas</div>
+          <div class="card">Competitor research</div>
+        </div>
+        <div class="board-column">
+          <div class="card card-highlight">Design Landing</div>
+          <div class="card">Setup authentication</div>
+        </div>
+        <div class="board-column">
+          <div class="card card-done">Create repo</div>
+          <div class="card card-done">Invite team</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CLICK -->
+<section class="section" id="demo">
+  <div class="container">
+    <h2 style="text-align:center; margin-bottom:1rem;">Interactive Mini Board</h2>
+    <div class="demo-board" id="demoBoard">
+      <div class="demo-column">To Do</div>
+      <div class="demo-column">Doing</div>
+      <div class="demo-column">Done</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section section-alt" id="pricing">
+  <div class="container">
+    <h2 style="text-align:center;">Start Free</h2>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">Make It © 2025</div>
+</footer>
+
+<script>
+// mobile nav toggle
+document.getElementById("navToggle").addEventListener("click", () => {
+  document.querySelector(".nav-links").classList.toggle("open");
+});
+
+// demo board click
+document.querySelectorAll(".demo-column").forEach(col => {
+  col.addEventListener("click", () => {
+    document.querySelectorAll(".demo-column").forEach(c => c.classList.remove("active"));
+    col.classList.add("active");
+  });
+});
+</script>
+
+</body>
+</html>

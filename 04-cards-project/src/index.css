@@ -25,11 +25,11 @@ body {
 .card {
     height: 330px;
     width: 280px;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 30px;
     padding: 30px;
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     justify-content: space-between;
 }
 

@@ -108,7 +108,7 @@ const App = () => {
   return (
     <div className='parent'>
       {jobOpenings.map((hrithik, index) => (
-        <Card
+        <Card 
           key={index}
           company={hrithik.companyName}
           timeline={hrithik.datePosted}
@@ -118,7 +118,7 @@ const App = () => {
           exp={hrithik.tag2}
           salary={hrithik.pay}
           place={hrithik.location}
-        />
+        /> 
       ))}
     </div>
   )

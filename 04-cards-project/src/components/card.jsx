@@ -1,11 +1,10 @@
-import React from 'react'
 import {Bookmark} from 'lucide-react'
 
-const card = (props) => {
+const card = (props) => { 
     return (
         <div className="card">
             <div>
-                <div className="top">
+                <div className="top"> 
                     <img src={props.logo} alt="" />
                     <button>Save<Bookmark size={15} /></button>
                 </div>
